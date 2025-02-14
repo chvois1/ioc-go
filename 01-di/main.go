@@ -12,10 +12,11 @@ import (
 // - insert a value
 // - retreive that value
 func main() {
-
 	const key = "key-001"
 	const value = "value-001"
-	cli := NewClient()
+	store := NewBackend()
+	fake := NewTestBackend()
+	cli := NewClient(store)
 	if err := cli.backend.Insert([]byte(key), []byte(value)); err != nil {
 		fmt.Printf("cannot insert value: [%s]\n", err.Error())
 		return
@@ -26,7 +27,17 @@ func main() {
 		return
 	}
 	fmt.Printf("found value [%s] from key [%s]\n", string(v), key)
-
+	cli = NewClient(fake)
+	if err := cli.backend.Insert([]byte(key), []byte(value)); err != nil {
+		fmt.Printf("cannot insert value: [%s]\n", err.Error())
+		return
+	}
+	v, err = cli.backend.FindByID([]byte(key))
+	if err != nil {
+		fmt.Printf("cannot retreive value from key [%s]: [%s]\n", key, err.Error())
+		return
+	}
+	fmt.Printf("found value [%s] from key [%s]\n", string(v), key)
 }
 
 type Storer interface {
@@ -52,12 +63,31 @@ func (be *Backend) FindByID(k []byte) ([]byte, error) {
 	return be.mdb.Get(k)
 }
 
+type TestBackend struct {
+	kv map[string][]byte
+}
+
+func NewTestBackend() *TestBackend {
+	return &TestBackend{
+		kv: make(map[string][]byte),
+	}
+}
+
+func (t *TestBackend) Insert(k []byte, v []byte) error {
+	t.kv[string(k)] = v
+	return nil
+}
+
+func (t *TestBackend) FindByID(k []byte) ([]byte, error) {
+	return t.kv[string(k)], nil
+}
+
 type Client struct {
 	backend Storer
 }
 
-func NewClient() *Client {
+func NewClient(db Storer) *Client {
 	return &Client{
-		backend: NewBackend(),
+		backend: db,
 	}
 }

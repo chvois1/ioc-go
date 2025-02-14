@@ -1,0 +1,13 @@
+@startuml
+namespace main {
+    class Client << (S,Aquamarine) >> {
+        - mdb *memdb.DB
+
+        + Insert(k []byte, v []byte) error
+        + FindByID(k []byte) ([]byte, error)
+
+    }
+}
+
+
+@enduml

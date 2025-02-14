@@ -1,0 +1,31 @@
+@startuml
+namespace main {
+    class Backend << (S,Aquamarine) >> {
+        - mdb *memdb.DB
+
+        + Insert(k []byte, v []byte) error
+        + FindByID(k []byte) ([]byte, error)
+
+    }
+    class Client << (S,Aquamarine) >> {
+        - backend Storer
+
+    }
+    interface Storer  {
+        + Insert(k []byte, v []byte) error
+        + FindByID(k []byte) ([]byte, error)
+
+    }
+    class TestBackend << (S,Aquamarine) >> {
+        - kv <font color=blue>map</font>[string][]byte
+
+        + Insert(k []byte, v []byte) error
+        + FindByID(k []byte) ([]byte, error)
+
+    }
+}
+
+"main.Storer" <|-- "main.Backend"
+"main.Storer" <|-- "main.TestBackend"
+
+@enduml
