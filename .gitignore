@@ -7,6 +7,9 @@
 *.dll
 *.so
 *.dylib
+/00-oop/00-oop
+/01-di/01-di
+/02-ioc/02-ico
 
 # Test binary, built with `go test -c`
 *.test
