@@ -1,13 +1,11 @@
-@startuml
-namespace main {
-    class Client << (S,Aquamarine) >> {
-        - mdb *memdb.DB
+@startuml 00-oop
+namespace backend {
 
-        + Insert(k []byte, v []byte) error
-        + FindByID(k []byte) ([]byte, error)
-
+    class Client  {
+        mdb *memdb.DB
+        Insert(k []byte, v []byte) error
+        FindByID(k []byte) ([]byte, error)
     }
 }
-
 
 @enduml
