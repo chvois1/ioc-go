@@ -118,7 +118,7 @@ func (t *TestBackend) Get(k []byte) ([]byte, error) {
 
 ![Client library that make use of DI for testing](./doc/01-test.png "Client library that make use of DI for testing")
 
-### More Storer Methods
+## More Storer Methods
 
 Now let us assume other parts of  the client library, which also use the Storer facility, need more Backend methods than Get/Put. For them, we have to extend the Storer Transport interface.
 
@@ -126,13 +126,16 @@ Now let us assume other parts of  the client library, which also use the Storer 
 
 We now have a problem. The compiler complains that our TestBackend does not fulfill the Storer interface anymore. So we must fix it by adding the missing functions ...
 
-### IoC - Inversion of Control
+## IoC - Inversion of Control
 
 With every new function in Storer, we break our existing TestBackend implementation. With large code bases, that leads to maintenance nightmares.
 
-The problem is that our Client (and accompanying unit test) depends on a type that they do not control. In this case, it is the Storer interface. To solve the problem, let us invert the control by introducing an unexported interface that declares only what is needed for the Client.
+The problem is that our Client (and accompanying tests) depends on a type that they do not control. In this case, it is the Storer interface. To solve the problem, let us invert the control by introducing an unexported interface that declares only what is needed for the Client.
 
-![Client library extends the storer interface](./doc/01-di-ext.png "Client library extends the storer interface")
+![Client library extends the storer interface](./doc/02-ioc.png "Client library extends the storer interface")
 
+Thanks to Go's implicit interface implementation (i.e., duck typing): nothing changes for the user of our library.
 
-Thanks to Go's implicit interface implementation (call it 'duck typing' if you want), nothing changes for the user of our library:
+## Conclusion
+
+Do not export interfaces. Export concrete implementations. If consumers need an interface, let them define it in their own scope !
