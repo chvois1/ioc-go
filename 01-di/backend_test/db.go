@@ -10,11 +10,11 @@ func NewTestBackend() *TestBackend {
 	}
 }
 
-func (t *TestBackend) Insert(k []byte, v []byte) error {
-	t.kv[string(k)] = v
+func (t *TestBackend) Put(k []byte, v []byte) error {
+	t.kv[string(k[:])] = v
 	return nil
 }
 
-func (t *TestBackend) FindByID(k []byte) ([]byte, error) {
+func (t *TestBackend) Get(k []byte) ([]byte, error) {
 	return t.kv[string(k)], nil
 }

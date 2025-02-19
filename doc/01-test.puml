@@ -1,0 +1,31 @@
+@startuml 01-test
+namespace backend {
+  class Client {
+    - backend Storer
+    + Insert(k string, v string) error
+    + FindByID(k string) (string, error)
+
+  }
+  class LevelDB {
+    - mdb *memdb.DB
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)    
+  }
+  interface Storer  {
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+  }
+}
+namespace backend_test {
+  class TestBackend  {
+    - kv map[string][]byte
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+  }
+}
+
+backend.Client --> backend.Storer : uses
+backend.Storer <|-- backend.LevelDB : implements
+backend.Storer <|-- backend_test.TestBackend : implements
+
+@enduml

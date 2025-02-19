@@ -14,11 +14,11 @@ func main() {
 	const value = "value-001"
 
 	cli := backend.NewClient()
-	if err := cli.Insert([]byte(key), []byte(value)); err != nil {
+	if err := cli.Insert(key, value); err != nil {
 		fmt.Printf("cannot insert value: [%s]\n", err.Error())
 		return
 	}
-	v, err := cli.FindByID([]byte(key))
+	v, err := cli.FindByID(key)
 	if err != nil {
 		fmt.Printf("cannot retreive value from key [%s]: [%s]\n", key, err.Error())
 		return

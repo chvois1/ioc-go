@@ -1,11 +1,10 @@
 @startuml 00-oop
 namespace backend {
 
-    class Client  {
-        mdb *memdb.DB
-        Insert(k []byte, v []byte) error
-        FindByID(k []byte) ([]byte, error)
-    }
+  class Client  {
+    - mdb *memdb.DB
+    + Insert(k string, v string) error
+    + FindByID(k string) (string, error)
+  }
 }
-
 @enduml

@@ -1,32 +1,23 @@
 @startuml 01-di
 namespace backend {
-    class LevelDB {
-        mdb *memdb.DB
-        Insert(k []byte, v []byte) error
-        FindByID(k []byte) ([]byte, error)
-    }
-    class Client {
-        backend Storer
-        Insert(k []byte, v []byte) error
-        FindByID(k []byte) ([]byte, error)
+  class Client {
+    - backend Storer
+    + Insert(k string, v string) error
+    + FindByID(k string) (string, error)
 
-    }
-    interface Storer  {
-        Insert(k []byte, v []byte) error
-        FindByID(k []byte) ([]byte, error)
-
-    }
-}
-namespace backend_test {
-    class TestBackend  {
-        kv <font color=blue>map</font>[string][]byte
-        Insert(k []byte, v []byte) error
-        FindByID(k []byte) ([]byte, error)
-    }
+  }
+  class LevelDB {
+    - mdb *memdb.DB
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)    
+  }
+  interface Storer  {
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+  }
 }
 
 backend.Client --> backend.Storer : uses
 backend.Storer <|-- backend.LevelDB : implements
-backend.Storer <|-- backend_test.TestBackend : implements
 
 @enduml

@@ -15,10 +15,11 @@ func NewClient() *Client {
 	}
 }
 
-func (cli *Client) Insert(k []byte, v []byte) error {
-	return cli.mdb.Put(k, v)
+func (cli *Client) Insert(k string, v string) error {
+	return cli.mdb.Put([]byte(k), []byte(v))
 }
 
-func (cli *Client) FindByID(k []byte) ([]byte, error) {
-	return cli.mdb.Get(k)
+func (cli *Client) FindByID(k string) (string, error) {
+	b, err := cli.mdb.Get([]byte(k))
+	return string(b[:]), err
 }

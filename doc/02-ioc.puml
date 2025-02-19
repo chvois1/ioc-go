@@ -1,0 +1,35 @@
+@startuml 02-ioc
+namespace backend {
+  class Client {
+    - backend Storer
+    + Insert(k string, v string) error
+    + FindByID(k string) (string, error)
+
+  }
+  class LevelDB {
+    - mdb *memdb.DB
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+    + Last() bool
+	  + Next() ([]byte, []byte)
+	  + HasNext() bool
+    + Peek()([]byte, []byte)
+  }
+  interface storer  {
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+  }
+}
+namespace backend_test {
+  class TestBackend  {
+    - kv map[string][]byte
+    + Put(k []byte, v []byte) error
+    + Get(k []byte) ([]byte, error)
+  }
+}
+
+backend.Client --> backend.storer : uses
+backend.storer <|-- backend.LevelDB : implements\n(implicit by duck typing)
+backend.storer <|-- backend_test.TestBackend : implements\n(implicit by duck typing)
+
+@enduml

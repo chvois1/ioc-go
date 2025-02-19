@@ -15,10 +15,10 @@ func NewBackend() *Backend {
 	}
 }
 
-func (be *Backend) Insert(k []byte, v []byte) error {
+func (be *Backend) Put(k []byte, v []byte) error {
 	return be.mdb.Put(k, v)
 }
 
-func (be *Backend) FindByID(k []byte) ([]byte, error) {
+func (be *Backend) Get(k []byte) ([]byte, error) {
 	return be.mdb.Get(k)
 }
