@@ -59,7 +59,7 @@ func (be *Backend) Get(k []byte) ([]byte, error) {
 }
 ```
 
-And lat us rewrite the client so that it now depends on a Storer:
+And let us rewrite the client so that it now depends on a Storer:
 
 ```go
 type Client struct {
@@ -120,7 +120,7 @@ func (t *TestBackend) Get(k []byte) ([]byte, error) {
 
 ## More Storer Methods
 
-Now let us assume other parts of  the client library, which also use the Storer facility, need more Backend methods than Get/Put. For them, we have to extend the Storer Transport interface.
+Now let us assume other parts of  the client library, which also use the Storer facility, need more Backend methods than Get/Put. For them, we have to extend the Storer interface.
 
 ![Client library extends the storer interface](./doc/01-di-ext.png "Client library extends the storer interface")
 
@@ -134,8 +134,12 @@ The problem is that our Client (and accompanying tests) depends on a type that t
 
 ![Client library extends the storer interface](./doc/02-ioc.png "Client library extends the storer interface")
 
-Thanks to Go's implicit interface implementation (i.e., duck typing): nothing changes for the user of our library.
+Thanks to Go's implicit interface implementation (i.e., duck typing): nothing changes for the users of our library.
 
 ## Conclusion
 
-Do not export interfaces. Export concrete implementations. If consumers need an interface, let them define it in their own scope !
+Do not export interfaces. 
+
+Export concrete implementations. 
+
+If consumers need an interface, let them define it in their own scope !
